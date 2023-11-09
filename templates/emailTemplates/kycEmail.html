@@ -1,0 +1,65 @@
+<!-- email_templates/confirmation_email.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #001d23;
+        padding: 20px;
+        color: "white";
+      }
+      .container {
+        background-color: #003f4c;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        color: white;
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      .message {
+        color: #00d4ff;
+        font-size: 16px;
+      }
+      .sign {
+        margin-top: 200px;
+        color: #00d4ff;
+        font-size: 16px;
+      }
+      .sign img {
+        height: 100px;
+        width: 150px;
+      }
+
+      a {
+        font-size: 20px;
+        color: white;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">KYC Request</div>
+      <div class="message">
+        <p>A user has applied for KYC.</p>
+
+        <div>
+          <a href="{{user_url}}">View</a>
+        </div>
+
+        <div class="sign">
+          <p>Thanks and Regards</p>
+          <img
+            src="https://bitmemoirlatam.com/static/media/logo.6d04ea37b89ab0072e00.png"
+            alt="Beyond Imagination Technologies"
+          />
+          <p>Beyond Imagination Technologies</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
