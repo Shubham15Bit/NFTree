@@ -10,18 +10,12 @@ from user.serializers import (
     KYCSerializer,
 )
 from user.models import Account, Organization, UserEmail, KYC
-from django.core.mail import send_mail
-import random
 from user.mail import send_otp_email, send_kyc_email
 
 
 class UserCreate(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.AllowAny]
-
-
-class UserLoginView(TokenObtainPairView):
     permission_classes = [permissions.AllowAny]
 
 
