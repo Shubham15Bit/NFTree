@@ -12,6 +12,8 @@ from social_core.backends.oauth import BaseOAuth2
 from social_core.exceptions import MissingBackend, AuthTokenError, AuthForbidden
 from social_django.utils import load_strategy, load_backend
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.models import User
+from rest_framework_simplejwt.tokens import AccessToken
 
 
 class SocialLoginView(generics.GenericAPIView):
@@ -74,3 +76,26 @@ class SocialLoginView(generics.GenericAPIView):
 
 class UserLoginView(TokenObtainPairView):
     permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        if response.status_code == status.HTTP_200_OK:
+            access_token = response.data.get('access')
+            if access_token:
+                token = AccessToken(access_token)
+                user = token.payload.get('user_id')
+                # Now you have access to the user ID
+                user_instance = User.objects.get(id=user)
+                username = user_instance.username
+                email = user_instance.email
+                id = user_instance.id
+                first_name = user_instance.first_name
+                last_name = user_instance.last_name
+                # Do whatever you need with the user's details
+                # Customize the response data to include user details
+                response.data['id'] = id
+                response.data['username'] = username
+                response.data['first_name'] = first_name
+                response.data['last_name'] = last_name
+
+        return response
