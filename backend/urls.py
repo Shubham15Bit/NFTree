@@ -29,7 +29,7 @@ from rest_framework_simplejwt.views import (
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ["url", "username","first_name", "last_name", "is_staff"]
+        fields = ["url", "username", "first_name", "last_name", "is_staff"]
 
 
 # ViewSets define the view behavior.
@@ -53,6 +53,7 @@ urlpatterns = [
     re_path(r"^auth/", include("drf_social_oauth2.urls", namespace="drf")),
     # App urls
     path("user/", include("user.urls")),
+    path("project/", include("projects.urls")),
 ]
 
 # urlpatterns += default_urlpatterns()
