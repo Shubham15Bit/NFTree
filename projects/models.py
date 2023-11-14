@@ -20,9 +20,10 @@ class ProjectInfo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     description = models.TextField(default="", null=True, blank=True)
-    plantTypes = models.CharField(max_length=500, blank=True, null=True)
+    plant_types = models.CharField(max_length=500, blank=True, null=True)
     area = models.IntegerField(blank=True, null=True)
-    plantPlanned = models.IntegerField(blank=True, null=True)
+    plant_planned = models.IntegerField(blank=True, null=True)
+    plants_planted = models.IntegerField(blank=True, null=True)
     donation = models.IntegerField(blank=True, null=True)
     # donation = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     address = models.CharField(max_length=500, blank=True, null=True)
@@ -30,3 +31,5 @@ class ProjectInfo(models.Model):
     country = models.CharField(max_length=100, blank=True, null=True)
     document = models.FileField(upload_to=document_upload, blank=True, null=True)
     image = models.FileField(upload_to=image_upload, blank=True, null=True)
+    is_completed = models.BooleanField(default=False)
+

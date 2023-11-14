@@ -12,5 +12,5 @@ class ProjectInfoSerializer(serializers.ModelSerializer):
         try:
             kyc = KYC.objects.get(user=obj.user)
             return kyc.status == "Approved"
-        except:
+        except KYC.DoesNotExist:
             return False

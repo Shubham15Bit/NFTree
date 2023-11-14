@@ -10,7 +10,7 @@ class ProjectInfoCreate(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class ProjectInfoUpdate(generics.UpdateAPIView):
+class ProjectInfoUpdate(generics.RetrieveUpdateAPIView):
     queryset = ProjectInfo.objects.all()
     serializer_class = ProjectInfoSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -19,7 +19,7 @@ class ProjectInfoUpdate(generics.UpdateAPIView):
 class ProjectInfoList(generics.ListAPIView):
     queryset = ProjectInfo.objects.all()
     serializer_class = ProjectInfoSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 
 class UserProjectsList(generics.ListAPIView):
