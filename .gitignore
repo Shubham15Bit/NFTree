@@ -3,3 +3,4 @@ db.sqlite3
 /backendv2/config.py
 image
 documents
+profile_pic

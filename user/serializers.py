@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from user.models import Account, UserEmail, Organization, KYC
+from user.models import ProfilePicture, Account, UserEmail, Organization, KYC
 
 
 class SocialAuthSerializer(serializers.Serializer):
@@ -19,6 +19,13 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
+
+
+class ProfilePictureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProfilePicture
+        fields = "__all__"
+        read_only_fields = ("user",)
 
 
 class AccountSerializer(serializers.ModelSerializer):

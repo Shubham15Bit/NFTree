@@ -1,15 +1,15 @@
 from django.contrib.auth.models import User
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from rest_framework_simplejwt.views import TokenObtainPairView
 from user.serializers import (
     UserSerializer,
     AccountSerializer,
     UserEmailSerializer,
     OrganizationSerializer,
     KYCSerializer,
+    ProfilePictureSerializer,
 )
-from user.models import Account, Organization, UserEmail, KYC
+from user.models import ProfilePicture, Account, Organization, UserEmail, KYC
 from user.mail import send_otp_email, send_kyc_email
 
 
@@ -17,6 +17,24 @@ class UserCreate(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.AllowAny]
+
+
+class ProfilePictureListCreateView(generics.ListCreateAPIView):
+    queryset = ProfilePicture.objects.all()
+    serializer_class = ProfilePictureSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class ProfilePictureDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ProfilePicture.objects.all()
+    serializer_class = ProfilePictureSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
 
 
 class AccountListCreateView(generics.ListAPIView):

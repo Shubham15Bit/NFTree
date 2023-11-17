@@ -59,16 +59,39 @@ class SocialLoginView(generics.GenericAPIView):
                 {"error": "invalid token", "details": str(error)},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+        # Attempt to fetch the user's full name from the backend (Google)
+        try:
+            user_info = backend.user_data(access_token)
+            full_name = user_info.get("name")
+            print(full_name)
+            first_name, last_name = "", ""
+
+            # Attempt to split the full name into first and last names
+            name_parts = full_name.split()
+            if len(name_parts) > 1:
+                first_name = name_parts[0]
+                last_name = " ".join(name_parts[1:])
+
+            authenticated_user.first_name = first_name
+            authenticated_user.last_name = last_name
+            authenticated_user.save()
+        except Exception as e:
+            print(f"Error fetching user info: {str(e)}")
         if authenticated_user and authenticated_user.is_active:
             refresh = RefreshToken.for_user(authenticated_user)
             token = str(refresh.access_token)
-
+            print(authenticated_user)
+            # print(authenticated_user.name)
             response = {
-                "email": authenticated_user.email,
-                "username": authenticated_user.username,
+                # "email": authenticated_user.email,
+                "username": authenticated_user.email,
                 "token": token,  # Include the JWT token in the response
                 "id": authenticated_user.id,
+                "first_name": authenticated_user.first_name,
+                "last_name": authenticated_user.last_name,
             }
+            print(response)
             return Response(status=status.HTTP_200_OK, data=response)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -80,10 +103,10 @@ class UserLoginView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
         if response.status_code == status.HTTP_200_OK:
-            access_token = response.data.get('access')
+            access_token = response.data.get("access")
             if access_token:
                 token = AccessToken(access_token)
-                user = token.payload.get('user_id')
+                user = token.payload.get("user_id")
                 # Now you have access to the user ID
                 user_instance = User.objects.get(id=user)
                 username = user_instance.username
@@ -93,9 +116,9 @@ class UserLoginView(TokenObtainPairView):
                 last_name = user_instance.last_name
                 # Do whatever you need with the user's details
                 # Customize the response data to include user details
-                response.data['id'] = id
-                response.data['username'] = username
-                response.data['first_name'] = first_name
-                response.data['last_name'] = last_name
+                response.data["id"] = id
+                response.data["username"] = username
+                response.data["first_name"] = first_name
+                response.data["last_name"] = last_name
 
         return response

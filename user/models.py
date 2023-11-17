@@ -9,6 +9,29 @@ def fileupload(instance, filename):
     return "/".join(["user", new_file_name])
 
 
+def picupload(instance, filename):
+    file_extension = filename.split(".")[-1]
+    new_file_name = str(random.randrange(1000, 1000000)) + "." + file_extension
+    return "/".join(["profile_pic", new_file_name])
+
+
+class ProfilePicture(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    picture = models.ImageField(upload_to=picupload, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        # Check if the instance already has a file
+        try:
+            existing = ProfilePicture.objects.get(pk=self.pk)
+            if existing.picture != self.picture:
+                # If the new file is different, delete the old file
+                existing.picture.delete(save=False)
+        except ProfilePicture.DoesNotExist:
+            pass
+
+        super(ProfilePicture, self).save(*args, **kwargs)
+
+
 class Account(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50, default="")
