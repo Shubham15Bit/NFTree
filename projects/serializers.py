@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import ProjectInfo
+from .models import ProjectInfo, PlantImage
 from user.models import KYC
 
 
@@ -14,3 +14,9 @@ class ProjectInfoSerializer(serializers.ModelSerializer):
             return kyc.status == "Approved"
         except KYC.DoesNotExist:
             return False
+
+
+class PlantImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PlantImage
+        fields = "__all__"
