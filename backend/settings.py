@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "drf_social_oauth2",
     "user.apps.UserConfig",
     "projects.apps.ProjectsConfig",
+    "contact.apps.ContactConfig",
 ]
 
 MIDDLEWARE = [

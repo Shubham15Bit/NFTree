@@ -54,6 +54,7 @@ urlpatterns = [
     # App urls
     path("user/", include("user.urls")),
     path("project/", include("projects.urls")),
+    path("contact/", include("contact.urls")),
 ]
 
 # urlpatterns += default_urlpatterns()
