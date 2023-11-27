@@ -1,6 +1,11 @@
 from django.shortcuts import render
-from .models import ProjectInfo, PlantImage
-from .serializers import ProjectInfoSerializer, PlantImageSerializer
+from .models import ProjectInfo, PlantImage, Transaction, ProjectReport
+from .serializers import (
+    ProjectInfoSerializer,
+    PlantImageSerializer,
+    TransactionSerializer,
+    ProjectReportSerializer,
+)
 from rest_framework import generics, permissions
 
 
@@ -58,3 +63,27 @@ class ProjectPlantList(generics.ListAPIView):
             return PlantImage.objects.filter(project_id=project_id)
         else:
             return PlantImage.objects.all()
+
+
+class TransactionListCreateView(generics.ListCreateAPIView):
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class TransactionDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class ProjectReportListCreateView(generics.ListCreateAPIView):
+    queryset = ProjectReport.objects.all()
+    serializer_class = ProjectReportSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class ProjectReportDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ProjectReport.objects.all()
+    serializer_class = ProjectReportSerializer
+    permission_classes = [permissions.IsAuthenticated]
