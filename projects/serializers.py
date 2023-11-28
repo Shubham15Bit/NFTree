@@ -35,15 +35,25 @@ class PlantImageSerializer(serializers.ModelSerializer):
 
 
 class TransactionSerializer(serializers.ModelSerializer):
+    project_name = serializers.CharField(read_only=True)
+
     class Meta:
         model = Transaction
         fields = "__all__"
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        project_info = instance.project
+
+        if project_info:
+            representation["project_name"] = project_info.name
+
+        return representation
 
 
 class ProjectReportSerializer(serializers.ModelSerializer):
     total_plants = serializers.IntegerField(read_only=True)
     plant_types = serializers.CharField(read_only=True)
-
 
     class Meta:
         model = ProjectReport
@@ -54,7 +64,8 @@ class ProjectReportSerializer(serializers.ModelSerializer):
         project_info = instance.project
 
         if project_info:
-            representation['total_plants'] = project_info.plants_planted
-            representation['plant_types'] = project_info.plant_types
+            representation["total_plants"] = project_info.plants_planted
+            representation["plant_types"] = project_info.plant_types
+            representation["project_name"] = project_info.project_name
 
         return representation
