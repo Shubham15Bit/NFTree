@@ -3,7 +3,19 @@ from .models import ProjectInfo, PlantImage, Transaction, ProjectReport
 from user.models import KYC
 
 
+class PlantImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PlantImage
+        fields = "__all__"
+
+    # # Ensure that the image field is treated as a file upload
+    # def create(self, validated_data):
+    #     return PlantImage.objects.create(image=self.context['request'].data.get('image'), **validated_data)
+
+
 class ProjectInfoSerializer(serializers.ModelSerializer):
+    plant_images = PlantImageSerializer(many=True)
+
     class Meta:
         model = ProjectInfo
         fields = "__all__"
@@ -31,6 +43,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 class ProjectReportSerializer(serializers.ModelSerializer):
     total_plants = serializers.IntegerField(read_only=True)
     plant_types = serializers.CharField(read_only=True)
+
 
     class Meta:
         model = ProjectReport
